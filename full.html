@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZestyView</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #fff8f0;
+      text-align: center;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background-color: #ff6347;
+      color: white;
+      flex-wrap: wrap;
+    }
+    nav a {
+      margin: 10px;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    h1 {
+      font-size: 3rem;
+      font-family: 'Cursive', sans-serif;
+      margin: 40px 0 10px;
+    }
+    p {
+      font-size: 1.2rem;
+      color: #333;
+      margin-bottom: 30px;
+      padding: 0 15px;
+    }
+    .order-btn, .nav-btn, .cart-btn, .pay-btn {
+      padding: 12px 24px;
+      font-size: 1rem;
+      background-color: #ff6347;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-decoration: none;
+      margin: 10px;
+    }
+    .menu, .dishes, .cart, .payment, .thankyou {
+      display: none;
+    }
+    .dish-card {
+      background: #fff;
+      margin: 15px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      overflow: hidden;
+      flex: 1 1 250px;
+      max-width: 300px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    }
+    .dish-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+    }
+    .dish-card h4 {
+      margin: 10px 0 5px;
+    }
+    .dish-card p {
+      margin: 5px 0;
+    }
+    .dish-card button {
+      background-color: #ff6347;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+    .dish-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 10px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      margin: 10px 0;
+    }
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+      .order-btn, .nav-btn, .cart-btn, .pay-btn {
+        font-size: 0.9rem;
+        padding: 10px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div><strong>ZestyView</strong></div>
+    <nav>
+      <a href="#" onclick="goHome()">Home</a>
+      <a href="#">About</a>
+      <a href="#">Settings</a>
+      <a href="#">Help</a>
+    </nav>
+  </header>
+
+  <main class="home">
+    <h1>ZestyView</h1>
+    <p>Experience a variety of global cuisines from your seat. Order, customize, and pay with ease!</p>
+    <button class="order-btn" onclick="showMenu()">Order Now</button>
+  </main>
+
+  <section class="menu">
+    <h2>Select Cuisine</h2>
+    <button class="nav-btn" onclick="showDishes('indian')">Indian</button>
+    <button class="nav-btn" onclick="showDishes('chinese')">Chinese</button>
+    <button class="nav-btn" onclick="showDishes('korean')">Korean</button>
+  </section>
+
+  <section class="dishes" id="indian">
+    <h2>Indian Dishes</h2>
+    <div class="dish-container" id="indian-container"></div>
+    <button class="nav-btn" onclick="showMenu()">Back</button>
+    <button class="cart-btn" onclick="viewCart()">View Cart</button>
+  </section>
+
+  <section class="dishes" id="chinese">
+    <h2>Chinese Dishes</h2>
+    <div class="dish-container" id="chinese-container"></div>
+    <button class="nav-btn" onclick="showMenu()">Back</button>
+    <button class="cart-btn" onclick="viewCart()">View Cart</button>
+  </section>
+
+  <section class="dishes" id="korean">
+    <h2>Korean Dishes</h2>
+    <div class="dish-container" id="korean-container"></div>
+    <button class="nav-btn" onclick="showMenu()">Back</button>
+    <button class="cart-btn" onclick="viewCart()">View Cart</button>
+  </section>
+
+  <section class="cart">
+    <h2>Your Cart</h2>
+    <ul id="cart-items"></ul>
+    <h3>Total: ₹<span id="total">0</span></h3>
+    <button class="pay-btn" onclick="showPayment()">Proceed to Payment</button>
+    <button class="nav-btn" onclick="showMenu()">Back to Menu</button>
+  </section>
+
+  <section class="payment">
+    <h2>Payment</h2>
+    <p>Enter your payment details (simulated)</p>
+    <button class="pay-btn" onclick="finishOrder()">Pay Now</button>
+  </section>
+
+  <section class="thankyou">
+    <h1>Thank You!</h1>
+    <p>Your order at ZestyView has been placed successfully.</p>
+    <button class="order-btn" onclick="goHome()">Back to Order</button>
+  </section>
+
+  <script>
+    const cart = [];
+    let total = 0;
+
+    const indianDishes = Array.from({ length: 5 }, (_, i) => ({
+      name: `Indian Dish ${i + 1}`,
+      price: 100 + (i % 10) * 10
+    }));
+    const chineseDishes = Array.from({ length: 5 }, (_, i) => ({
+      name: `Chinese Dish ${i + 1}`,
+      price: 90 + (i % 10) * 10
+    }));
+    const koreanDishes = Array.from({ length: 5 }, (_, i) => ({
+      name: `Korean Dish ${i + 1}`,
+      price: 110 + (i % 10) * 10
+    }));
+
+    function hideAll() {
+      document.querySelector('.home').style.display = 'none';
+      document.querySelector('.menu').style.display = 'none';
+      document.querySelectorAll('.dishes').forEach(d => d.style.display = 'none');
+      document.querySelector('.cart').style.display = 'none';
+      document.querySelector('.payment').style.display = 'none';
+      document.querySelector('.thankyou').style.display = 'none';
+    }
+
+    function goHome() {
+      hideAll();
+      document.querySelector('.home').style.display = 'block';
+    }
+
+    function showMenu() {
+      hideAll();
+      document.querySelector('.menu').style.display = 'block';
+    }
+
+    function showDishes(cuisine) {
+      hideAll();
+      document.getElementById(cuisine).style.display = 'block';
+    }
+
+    function populateCuisine(containerId, dishes) {
+      const container = document.getElementById(`${containerId}-container`);
+      dishes.forEach(({ name, price }) => {
+        const card = document.createElement('div');
+        card.className = 'dish-card';
+        card.innerHTML = `
+          <img src="https://source.unsplash.com/300x150/?${name.replace(/ /g, '-')}" alt="${name}">
+          <h4>${name}</h4>
+          <p>₹${price}</p>
+          <button onclick="addToCart('${name}', ${price})">Add</button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function addToCart(item, price) {
+      cart.push({ item, price });
+      total += price;
+      alert(`${item} added to cart!`);
+    }
+
+    function removeFromCart(index) {
+      total -= cart[index].price;
+      cart.splice(index, 1);
+      viewCart();
+    }
+
+    function viewCart() {
+      hideAll();
+      const cartList = document.getElementById('cart-items');
+      cartList.innerHTML = '';
+      cart.forEach(({ item, price }, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `${item} - ₹${price} <button onclick="removeFromCart(${index})">Remove</button>`;
+        cartList.appendChild(li);
+      });
+      document.getElementById('total').textContent = total;
+      document.querySelector('.cart').style.display = 'block';
+    }
+
+    function showPayment() {
+      hideAll();
+      document.querySelector('.payment').style.display = 'block';
+    }
+
+    function finishOrder() {
+      hideAll();
+      document.querySelector('.thankyou').style.display = 'block';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      populateCuisine('indian', indianDishes);
+      populateCuisine('chinese', chineseDishes);
+      populateCuisine('korean', koreanDishes);
+    });
+  </script>
+</body>
+</html>
